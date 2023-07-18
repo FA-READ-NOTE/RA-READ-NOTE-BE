@@ -2,16 +2,16 @@ package com.example.fa.dto;
 
 import com.example.fa.entity.Role;
 import com.example.fa.entity.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @AllArgsConstructor
 public class UserSignUpDto {
     @NotBlank(message = "아이디를 입력해주세요")

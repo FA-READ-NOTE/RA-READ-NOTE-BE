@@ -19,12 +19,11 @@ import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
     // 회원가입
-    @PostMapping("/signup")
+    @PostMapping("/signUp")
     public ResponseEntity signup(@Valid @RequestBody UserSignUpDto dto) throws Exception {
         User user = userService.signup(dto);
         Map<String, Object> result = new HashMap<>();
