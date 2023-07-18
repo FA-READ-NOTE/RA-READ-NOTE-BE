@@ -40,7 +40,7 @@ public class UserController {
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-AUTH-TOKEN", jwtToken);
 
-        log.info("headers" + headers);
+        log.info("headers : " + headers);
 
         return ResponseEntity.ok().headers(headers).body("login success");
     }
