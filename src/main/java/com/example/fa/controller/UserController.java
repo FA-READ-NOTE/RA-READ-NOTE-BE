@@ -5,6 +5,7 @@ import com.example.fa.dto.UserSignUpDto;
 import com.example.fa.entity.User;
 import com.example.fa.service.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import java.util.Objects;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
     private final UserService userService;
 
@@ -37,6 +39,9 @@ public class UserController {
         String jwtToken = userService.login(dto);
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-AUTH-TOKEN", jwtToken);
+
+        log.info("headers" + headers);
+
         return ResponseEntity.ok().headers(headers).body("login success");
     }
 }
