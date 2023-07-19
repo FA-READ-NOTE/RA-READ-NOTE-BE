@@ -38,7 +38,7 @@ public class KakaoService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=a6e8850e6c951a7c97b1bb8be5eca85a"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:6000/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri=http://localhost:8080/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
@@ -121,7 +121,7 @@ public class KakaoService {
             System.out.println("nickname : " + nickname);
 
             //회원가입
-            if(userRepository.findByEmail(email) == null){
+            if(userRepository.findByEmail(email).orElse(null) == null){
                 String password = UUID.randomUUID().toString();
                 final KakaoUserDto userDto = new KakaoUserDto(email, nickname, password);
                 User user = userDto.toEntity();
