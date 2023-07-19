@@ -3,15 +3,15 @@ package com.example.fa.controller;
 import com.example.fa.dto.UserLoginDto;
 import com.example.fa.dto.UserSignUpDto;
 import com.example.fa.entity.User;
+import com.example.fa.service.KakaoService;
 import com.example.fa.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -23,6 +23,7 @@ import java.util.Objects;
 @Slf4j
 public class UserController {
     private final UserService userService;
+
 
     // 회원가입
     @PostMapping("/signUp")
@@ -44,4 +45,6 @@ public class UserController {
 
         return ResponseEntity.ok().headers(headers).body("login success");
     }
+
+
 }
