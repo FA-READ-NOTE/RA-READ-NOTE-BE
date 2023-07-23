@@ -1,6 +1,7 @@
 package com.example.fa.controller;
 
 import com.example.fa.service.KakaoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -39,10 +40,8 @@ public class KakaoController {
 
     @ResponseBody
     @GetMapping("/kakao/callback")
-    public void  kakaoCallback(@RequestParam String code)  {
-        String access_Token = kakaoService.getKaKaoAccessToken(code);
-        System.out.println(access_Token);
-        kakaoService.createKakaoUser(access_Token);
+    public void  kakaoCallback(@RequestParam String code, HttpServletResponse response) throws JsonProcessingException {
+        kakaoService.kakaoLogin(code);
     }
 
 
