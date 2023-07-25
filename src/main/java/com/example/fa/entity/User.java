@@ -1,10 +1,12 @@
 package com.example.fa.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,7 +29,9 @@ public class User extends BaseEntity{
 
     @Column(columnDefinition="LONGTEXT")
     private String image;
-
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Note> notes;
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
     }
