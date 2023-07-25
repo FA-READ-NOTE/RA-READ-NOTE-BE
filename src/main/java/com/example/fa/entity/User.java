@@ -1,6 +1,7 @@
 package com.example.fa.entity;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import javax.persistence.*;
@@ -23,6 +24,10 @@ public class User extends BaseEntity{
     private  String nickname;
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @Column(columnDefinition="LONGTEXT")
+    private String image;
+
     public void encodePassword(PasswordEncoder passwordEncoder){
         this.password = passwordEncoder.encode(password);
     }
