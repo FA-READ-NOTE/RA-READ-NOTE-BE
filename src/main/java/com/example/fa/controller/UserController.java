@@ -23,7 +23,11 @@ import java.util.Objects;
 @Slf4j
 public class UserController {
     private final UserService userService;
-
+    // 테스트 용
+    @GetMapping("/test")
+    public ResponseEntity test() {
+        return ResponseEntity.ok().body("test");
+    }
 
     // 회원가입
     @PostMapping("/signUp")
