@@ -22,4 +22,5 @@ public class Note extends BaseEntity{
     @JoinColumn(name="user_id")
     @JsonBackReference
     private User user;
+    private String file;
 }
