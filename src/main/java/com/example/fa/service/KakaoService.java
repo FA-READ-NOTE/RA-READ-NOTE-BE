@@ -2,24 +2,50 @@ package com.example.fa.service;
 
 
 
+import com.example.fa.config.UserDetailsImpl;
+import com.example.fa.config.jwt.JwtTokenProvider;
 import com.example.fa.dto.KakaoUserDto;
 import com.example.fa.entity.User;
 import com.example.fa.repository.UserRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class KakaoService {
     private final UserRepository userRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
+    public User kakaoLogin(String code) throws JsonProcessingException {
+        // "인가 코드"로 "액세스 토큰" 요청
+        String accessToken = getKaKaoAccessToken(code);
+
+        //카카오ID로 회원가입 처리
+        User user = createKakaoUser(accessToken);
+        System.out.println(user);
+
+        // 강제 로그인 처리
+        forceLogin(user);
+        return user;
+    }
     public String getKaKaoAccessToken(String code){
         String access_Token="";
         String refresh_Token ="";
@@ -38,8 +64,9 @@ public class KakaoService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=a6e8850e6c951a7c97b1bb8be5eca85a"); // TODO REST_API_KEY 입력
-            sb.append("&redirect_uri=http://localhost:6000/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
+            sb.append("&redirect_uri=http://localhost:8080/kakao/callback"); // TODO 인가코드 받은 redirect_uri 입력
             sb.append("&code=" + code);
+            //sb.append("&client_secret=PFfeG5iaRAO4P98unsDqbcoHoeYzRZ2r");
             bw.write(sb.toString());
             bw.flush();
 
@@ -75,7 +102,7 @@ public class KakaoService {
         return access_Token;
     }
 
-    public void createKakaoUser(String token)  {
+    public User createKakaoUser(String token)  {
 
         String reqURL = "https://kapi.kakao.com/v2/user/me";
 
@@ -121,18 +148,31 @@ public class KakaoService {
             System.out.println("nickname : " + nickname);
 
             //회원가입
-            if(userRepository.findByEmail(email) == null){
+            User user = userRepository.findByEmail(email).orElse(null);
+            if(user == null){
                 String password = UUID.randomUUID().toString();
                 final KakaoUserDto userDto = new KakaoUserDto(email, nickname, password);
-                User user = userDto.toEntity();
+                user = userDto.toEntity();
                 userRepository.save(user);
             }
 
-
             br.close();
+            return user;
+
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        return null;
+
     }
+
+
+    //  강제 로그인 처리
+    private void forceLogin(User kakaoUser) {
+        UserDetails userDetails = new UserDetailsImpl(kakaoUser);
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
 }

@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login", "/signUp","/").permitAll()
+                .antMatchers("/login","/kakao/login", "/signUp","/").permitAll()
 
                 .anyRequest().permitAll();
     }
