@@ -1,7 +1,6 @@
 package com.example.fa.entity;
 
 import lombok.*;
-
 import javax.persistence.*;
 
 @Entity
@@ -21,4 +20,7 @@ public class Book {
     private String writer;
     @Column(columnDefinition="LONGTEXT")
     private String cover;
+
+
+
 }
