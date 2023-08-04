@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 
 
 @RestController
@@ -30,7 +31,7 @@ public class BookController {
     }
 
     @PostMapping("/book/like")
-    public Book like(@RequestBody BookDetailDto dto) {
-        return bookService.like(dto);
+    public ResponseEntity<Book> like(@Valid @RequestBody BookDetailDto dto) throws Exception {
+        return new ResponseEntity<>(bookService.like(dto), HttpStatus.OK);
     }
 }

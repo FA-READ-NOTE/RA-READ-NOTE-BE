@@ -32,6 +32,7 @@ public class BookDetailDto {
                 .title(items.get(0).title)
                 .writer(items.get(0).author)
                 .cover(items.get(0).image)
+                .isbn(items.get(0).isbn)
                 .build();
     }
 

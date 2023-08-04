@@ -21,7 +21,7 @@ import java.net.URI;
 @Transactional
 public class BookService {
 
-    private BookRepository bookRepository;
+    private final BookRepository bookRepository;
     @Value("${book.clientId}")
     private String client_id;
 
@@ -71,14 +71,15 @@ public class BookService {
         return restTemplate.exchange(uri, HttpMethod.GET, httpEntity, BookDetailDto.class).getBody();
     }
     //즐겨찾기 추가
-    public Book like(BookDetailDto dto)  {
-
+    public Book like(BookDetailDto dto) throws Exception {
+        if(bookRepository.findByIsbn(dto.getItems().get(0).isbn).isPresent())
+            throw new Exception("이미 즐겨찾기한 책입니다.");
         Book book = dto.toEntity();
         System.out.println(book.getTitle());
-        //bookRepository.save(book);
+        bookRepository.save(book);
         return book;
     }
 
-    //즐겨찾기 취소
+
 
 }

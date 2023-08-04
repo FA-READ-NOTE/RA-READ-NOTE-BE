@@ -12,7 +12,6 @@ import javax.persistence.*;
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true)
     private Long book_id;
 
     private String title;
@@ -21,6 +20,7 @@ public class Book {
     @Column(columnDefinition="LONGTEXT")
     private String cover;
 
-
+    @Column(unique = true)
+    private String isbn;
 
 }
